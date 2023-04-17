@@ -1,5 +1,7 @@
 # Tic Tac Toe Game
-- I was bored this monday, then i realized "Hey! I actually haven't made a tic tac to game ever, let's make a simple version"
+- I was bored this Monday then realized "Hey! I actually haven't made a tic tac toe game ever, let's make a one!"
+
+## Repo info
 - `include` folder contains the game class and the method definitions
 - Compile the `main.cpp` file with:
     - `g++ main.cpp -o tictactoe`
