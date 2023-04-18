@@ -140,7 +140,7 @@ void Tictactoe::gameOver(char winner){
         std::cout << "\t\t\t\t The game was a DRAW!\n";
     
     else
-        std::cout << "\t\t\t\t The WINNER IS: " << winner;
+        std::cout << "\t\t\t\t The WINNER IS: " << winner << std::endl;
     pause;
     exit(0);
 }
