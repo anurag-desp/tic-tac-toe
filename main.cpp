@@ -119,10 +119,13 @@ int main(int argc, char **argv){
                 if(repetition > 0){
                     std::cout << "\t\t\t\t\t Coordinates already FILLED or INVALID!" << std::endl;
                     pause;
+                    print_area(game);
                 }
                 std::cout << "\n\n\t\t\t\t PLAYER 2" << std::endl;
                 std::cout << "\n\t\t Enter the coordinates: ";
                 std::cin >> player2_pic.x >> player2_pic.y;
+
+                repetition++;
             }while(!game.fillnCheck(player2_pic));
         }
         print_area(game); // Prints both the latest moves of the player 1 and player 2 
