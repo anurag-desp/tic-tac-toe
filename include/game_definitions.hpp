@@ -2,23 +2,23 @@
 #include "game_class.hpp"
 
 Tictactoe::Tictactoe(){
-    // Instantiating the game;
+    // Instantiating the game with each cell filled with ' '
     std::memset(game_area, ' ', sizeof(game_area));
 }
 
-void Tictactoe::checkDiagonals(int* count_user_pic, int* count_computer_pic, int indx, int indy){
-    if(game_area[indx][indy] == user_pic){
-        ++(*count_user_pic);
+void Tictactoe::checkDiagonals(int* count_player1_pic, int* count_player2_pic, int indx, int indy){
+    if(game_area[indx][indy] == player1_pic){
+        ++(*count_player1_pic);
     }
-    else if(game_area[indx][indy] == computer_pic){
-        ++(*count_computer_pic);
+    else if(game_area[indx][indy] == player2_pic){
+        ++(*count_player2_pic);
     }
 }
 
-void Tictactoe::checkWinner(int count_user_pic, int count_computer_pic){
-    if(count_user_pic == 3 || count_computer_pic == 3){
+void Tictactoe::checkWinner(int count_player1_pic, int count_player2_pic){
+    if(count_player1_pic == 3 || count_player2_pic == 3){
         game_over = true;
-        char winner = count_user_pic = 3? user_pic: computer_pic;
+        char winner = count_player1_pic = 3? player1_pic: player2_pic;
         gameOver(winner);
     }
 }
@@ -35,74 +35,84 @@ void Tictactoe::drawArea(){
 }
 
 void Tictactoe::checkGame(){
-    int count_user_pic = 0, count_computer_pic = 0, count_spaces = 0;
+    int count_player1_pic = 0, count_player2_pic = 0, count_spaces = 0;
 
     // checking horizontailly
     for(int i = 0; i < HEIGHT; i++){
         for(int j = 0; j < WIDTH; j++){
-            if(game_area[i][j] == user_pic)
-                count_user_pic++;
-            else if(game_area[i][j] == computer_pic)
-                count_computer_pic++;
+            if(game_area[i][j] == player1_pic)
+                count_player1_pic++;
+            else if(game_area[i][j] == player2_pic)
+                count_player2_pic++;
             else{
                 count_spaces++;
             }
         }
-        checkWinner(count_user_pic, count_computer_pic);
-        count_user_pic = 0;
-        count_computer_pic = 0;
+        checkWinner(count_player1_pic, count_player2_pic);
+        count_player1_pic = 0;
+        count_player2_pic = 0;
     }
 
     // Checking Vertically
     for(int i = 0; i < HEIGHT; i++){
         for(int j = 0; j < WIDTH; j++){
-            if(game_area[j][i] == user_pic)
-                count_user_pic++;
-            else if(game_area[j][i] == computer_pic)
-                count_computer_pic++;
+            if(game_area[j][i] == player1_pic)
+                count_player1_pic++;
+            else if(game_area[j][i] == player2_pic)
+                count_player2_pic++;
         }
-        checkWinner(count_user_pic, count_computer_pic);
-        count_user_pic = 0;
-        count_computer_pic = 0;
+        checkWinner(count_player1_pic, count_player2_pic);
+        count_player1_pic = 0;
+        count_player2_pic = 0;
     }
 
 
     // Check Diagonally
     // Diagonal 1
     for(int i = 0; i < HEIGHT; i++)
-        checkDiagonals(&count_user_pic, &count_computer_pic, i, i);
+        checkDiagonals(&count_player1_pic, &count_player2_pic, i, i);
     
-    checkWinner(count_user_pic, count_computer_pic);
-    count_user_pic = 0;
-    count_computer_pic = 0;
+    checkWinner(count_player1_pic, count_player2_pic);
+    count_player1_pic = 0;
+    count_player2_pic = 0;
 
     // Diagonal 2
     for(int i = 0; i < HEIGHT; i++)
-        checkDiagonals(&count_user_pic, &count_computer_pic, i, 2-i);
+        checkDiagonals(&count_player1_pic, &count_player2_pic, i, 2-i);
 
-    checkWinner(count_user_pic, count_computer_pic);
-    count_user_pic = 0;
-    count_computer_pic = 0; 
+    checkWinner(count_player1_pic, count_player2_pic);
+    count_player1_pic = 0;
+    count_player2_pic = 0; 
 
     if(count_spaces == 0)
         gameOver('d');
     
 }
 
-void Tictactoe::setPics(char symbol){
-    if(symbol == 'O')
-        computer_pic = 'X';
-    else
-        computer_pic = 'O';
-    user_pic = symbol;
+bool Tictactoe::setPics(char pic1, char pic2){
+    if(pic2 == ' '){
+        if(pic1 == 'O')
+            player2_pic = 'X';
+        else
+            player2_pic = 'O';
+        player1_pic = pic1;
+    }
+    else{
+        player1_pic = pic1;
+        player2_pic = pic2;
+
+        if(player1_pic == player2_pic)
+            return false;
+    }
+    return true;
 }
 
-void Tictactoe::putSymbol(){
+void Tictactoe::putPic(){
     srand(time(nullptr));
-    Symbol c;
+    Pic c;
     c.x = rand() % (WIDTH) + 1;
     c.y = rand() % (HEIGHT) + 1;
-    c.shape = computer_pic;
+    c.shape = player2_pic;
 
     while(!fillnCheck(c)){
         c.x = rand() % (WIDTH) + 1;
