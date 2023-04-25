@@ -2,36 +2,71 @@
 #include "game_class.hpp"
 
 Tictactoe::Tictactoe(){
-    // Instantiating the game with each cell filled with ' '
+    // Instantiating the game;
     std::memset(game_area, ' ', sizeof(game_area));
 }
 
-void Tictactoe::checkDiagonals(int* count_player1_pic, int* count_player2_pic, int indx, int indy){
-    if(game_area[indx][indy] == player1_pic){
-        ++(*count_player1_pic);
+bool Tictactoe::setPics(char pic1, char pic2){
+    if(pic2 == ' '){
+        if(pic1 == 'O')
+            player2_pic = 'X';
+        else
+            player2_pic = 'O';
+        player1_pic = pic1;
     }
-    else if(game_area[indx][indy] == player2_pic){
-        ++(*count_player2_pic);
+    else{
+        player1_pic = pic1;
+        player2_pic = pic2;
+
+        if(player1_pic == player2_pic)
+            return false;
+    }
+    return true;
+}
+
+void Tictactoe::putPic(){
+    srand(time(nullptr));
+    Pic c;
+    c.x = rand() % (WIDTH) + 1;
+    c.y = rand() % (HEIGHT) + 1;
+    c.shape = player2_pic;
+
+    while(!fillnCheck(c)){
+        c.x = rand() % (WIDTH) + 1;
+        c.y = rand() % (HEIGHT) + 1;
     }
 }
 
-void Tictactoe::checkWinner(int count_player1_pic, int count_player2_pic){
-    if(count_player1_pic == 3 || count_player2_pic == 3){
-        game_over = true;
-        char winner = count_player1_pic = 3? player1_pic: player2_pic;
-        gameOver(winner);
-    }
-}
 
 void Tictactoe::drawArea(){
+    std::cout << std::endl;
     for(int i = 0; i < HEIGHT; i++){
-        std::cout << "  |   |  " << std::endl;
-        std::cout << game_area[i][0] << " | " << game_area[i][1] << " | " << game_area[i][2] << std::endl;
+        std::cout << "\t\t\t\t\t\t\t  |   |  " << std::endl;
+        std::cout << "\t\t\t\t\t\t\t" << game_area[i][0] << " | " << game_area[i][1] << " | " << game_area[i][2] << std::endl;
         if(i != 2){
-            std::cout << "---------" << std::endl;
+            std::cout << "\t\t\t\t\t\t\t~~~~~~~~~" << std::endl;
         }
     }
     std::cout << std::endl;
+}
+
+
+bool Tictactoe::fillnCheck(Pic c){
+    // To use them as indices of array
+    --c.x;
+    --c.y;
+
+    // Fill the space
+    if((c.x >= 0 && c.x <= 2) &&
+       (c.y >= 0 && c.y <= 2)
+    ){
+        if(game_area[c.x][c.y] == ' '){
+            game_area[c.x][c.y] = c.shape;
+            checkGame();
+            return true;
+        }
+    }
+    return false;
 }
 
 void Tictactoe::checkGame(){
@@ -89,54 +124,26 @@ void Tictactoe::checkGame(){
     
 }
 
-bool Tictactoe::setPics(char pic1, char pic2){
-    if(pic2 == ' '){
-        if(pic1 == 'O')
-            player2_pic = 'X';
-        else
-            player2_pic = 'O';
-        player1_pic = pic1;
+void Tictactoe::checkDiagonals(int* count_player1_pic, int* count_player2_pic, int indx, int indy){
+    if(game_area[indx][indy] == player1_pic){
+        ++(*count_player1_pic);
     }
-    else{
-        player1_pic = pic1;
-        player2_pic = pic2;
-
-        if(player1_pic == player2_pic)
-            return false;
-    }
-    return true;
-}
-
-void Tictactoe::putPic(){
-    srand(time(nullptr));
-    Pic c;
-    c.x = rand() % (WIDTH) + 1;
-    c.y = rand() % (HEIGHT) + 1;
-    c.shape = player2_pic;
-
-    while(!fillnCheck(c)){
-        c.x = rand() % (WIDTH) + 1;
-        c.y = rand() % (HEIGHT) + 1;
+    else if(game_area[indx][indy] == player2_pic){
+        ++(*count_player2_pic);
     }
 }
 
-bool Tictactoe::fillnCheck(Pic c){
-    // To use them as indices of array
-    --c.x;
-    --c.y;
-
-    // Fill the space
-    if((c.x >= 0 && c.x <= 2) &&
-       (c.y >= 0 && c.y <= 2)
-    ){
-        if(game_area[c.x][c.y] == ' '){
-            game_area[c.x][c.y] = c.shape;
-            checkGame();
-            return true;
-        }
+void Tictactoe::checkWinner(int count_player1_pic, int count_player2_pic){
+    if(count_player1_pic == 3 || count_player2_pic == 3){
+        game_over = true;
+        char winner = count_player1_pic == 3? player1_pic: player2_pic;
+        gameOver(winner);
     }
-    return false;
 }
+
+
+
+
 
 void Tictactoe::gameOver(char winner){
     clearScreen();
@@ -147,10 +154,18 @@ void Tictactoe::gameOver(char winner){
 
     std::cout << "\n\n";
     if(winner == 'd')
-        std::cout << "\t\t\t\t The game was a DRAW!\n";
+        std::cout << "\t\t\t\t\t\t  The game was a DRAW!\n";
     
-    else
-        std::cout << "\t\t\t\t The WINNER IS: " << winner << std::endl;
+    else{
+        if(player1_pic == winner)
+            std::cout << "\t\t\t\t\t\t  " << "PLAYER 1" << " Wins!"<< std::endl;
+        else
+            std::cout << "\t\t\t\t\t\t  " << "PLAYER 2" << " Wins!"<< std::endl;
+
+    }
+    
+    std::cout << std::endl;
+    drawArea();
     pause;
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
