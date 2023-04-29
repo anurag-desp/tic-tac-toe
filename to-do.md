@@ -1,1 +1,0 @@
-- Rename area to board in the real game functions
