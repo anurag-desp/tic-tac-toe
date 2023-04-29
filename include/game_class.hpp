@@ -15,20 +15,21 @@ typedef struct Symbol{
 
 class Tictactoe{
     private:
-        char game_area[HEIGHT][WIDTH];
-        char player1_pic;
-        char player2_pic;
-        bool game_over = false;
+        char board[HEIGHT][WIDTH];
+        bool is_game_over = false;
 
-        void checkDiagonals(int* count_X, int* count_O, int indx, int indy);
-        void checkWinner(int count_X, int count_O);
-        void checkGame();
-        void gameOver(char winner);
+        void score_board();
+        char check_winner(int player1_count, int player2_count);
+
+        int minimax(int alpha, int beta, bool is_maximizing);
+
 
     public:
         Tictactoe();
-        void drawArea();
-        bool fillnCheck(Pic c);   // true if the Coordinates were put successfully, false otherwise
-        bool setPics(char player1_pic, char player2_pic);
-        void putPic();
+        void draw_board();
+        bool fill_n_check(Pic c);   // true if the Coordinates were put successfully, false otherwise
+        std::pair<char, int> find_winner();
+        void put_pic();
+        void next_best_move();
+        void game_over(char winner);
 };
