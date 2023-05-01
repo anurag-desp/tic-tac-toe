@@ -42,7 +42,7 @@ int main(int argc, char **argv){
     printLogo();
 
     if(choice == 'A'){
-        std::cout << "S I N G L E  P L A Y E R\n" << std::endl;
+        std::cout << "\n\n S I N G L E  P L A Y E R\n" << std::endl;
         std::cout << "e. Easy :)" << std::endl;
         std::cout << "i. Impossible ;]" << std::endl;
         
