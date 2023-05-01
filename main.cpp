@@ -7,7 +7,7 @@
 #include "./include/game_definitions.hpp"
 
 #define print_board(this_game) clearScreen();printLogo();this_game.draw_board()
-#define check_result() result = game.find_winner().first;if(result != no_winner){game.game_over(result);}
+#define check_result(this_game) result = this_game.find_winner().first;if(result != no_winner){this_game.game_over(result);}
 // #define print
 
 void printLogo(){
@@ -66,7 +66,7 @@ int main(int argc, char **argv){
             print_board(game);
             continue;
         }
-        check_result();
+        check_result(game);
 
         print_board(game);
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv){
                 game.next_best_move();
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(250));
-            check_result();
+            check_result(game);
         }
 
         else{
@@ -97,7 +97,7 @@ int main(int argc, char **argv){
 
                 repetition = 1;
             }while(!game.fill_n_check(player2_pic));
-            check_result();
+            check_result(game);
 
         }
 
